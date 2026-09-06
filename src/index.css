@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+/* ===== Stolzl (из макета Figma) ===== */
+@font-face{font-family:'Stolzl:Thin';src:url('/fonts/stolzl-thin.woff2') format('woff2');font-weight:100;font-style:normal;font-display:swap}
+@font-face{font-family:'Stolzl:Light';src:url('/fonts/stolzl-light.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Stolzl:Book';src:url('/fonts/stolzl-book.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Stolzl:Regular';src:url('/fonts/stolzl-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Stolzl:Medium';src:url('/fonts/stolzl-medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Stolzl:Bold';src:url('/fonts/stolzl-bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+/* обобщённое имя на всякий случай */
+@font-face{font-family:'Stolzl';src:url('/fonts/stolzl-book.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Stolzl';src:url('/fonts/stolzl-medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Stolzl';src:url('/fonts/stolzl-bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+
+html,
+body,
+#root {
+  width: 100%;
+}
+html,body{margin:0;overflow-x:hidden}
+body{font-family:'Stolzl:Regular','Stolzl',system-ui,sans-serif}

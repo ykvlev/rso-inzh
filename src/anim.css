@@ -1,0 +1,105 @@
+/* ================= Анимации (накатаны поверх экспорта Figma) ================= */
+
+/* --- Появление блоков при скролле --- */
+[data-name="Desktop - 2"] > .anim-reveal{
+  transform:translateY(52px);
+  transition:transform .85s cubic-bezier(.22,.61,.36,1), opacity .85s cubic-bezier(.22,.61,.36,1);
+  will-change:transform, opacity;
+}
+[data-name="Desktop - 2"] > .anim-reveal:not([class*="opacity-"]){opacity:0}
+[data-name="Desktop - 2"] > .anim-in{transform:translateY(0)}
+[data-name="Desktop - 2"] > .anim-in:not([class*="opacity-"]){opacity:1}
+
+/* --- Навигационные пиллы (Кем работать / Преимущества / FAQ / Контакты) --- */
+[class*="rounded-[61.901px]"]{transition:background-color .25s ease, transform .25s ease;cursor:pointer}
+[class*="rounded-[61.901px]"][class*="bg-[#f4f4f4]"]:hover{background-color:#0804ff !important;transform:translateY(-2px)}
+[class*="rounded-[61.901px]"][class*="bg-[#f4f4f4]"]:hover p{color:#fff !important}
+
+/* --- Кнопка «Оставить заявку» в шапке --- */
+[class*="rounded-[164.426px]"]{transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;cursor:pointer}
+[class*="rounded-[164.426px]"]:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 12px 26px rgba(8,4,255,.35)}
+
+/* --- Крупные ghost-пилюли «Хочу работать» (герой 159.368 / раздел 119.272): заливка + подъём --- */
+[class*="rounded-[159.368px]"],
+[class*="rounded-[119.272px]"]{transition:transform .3s ease, background-color .3s ease;cursor:pointer}
+[class*="rounded-[159.368px]"]:hover,
+[class*="rounded-[119.272px]"]:hover{transform:translateY(-3px);background-color:#fff}
+[class*="rounded-[159.368px]"]:hover ~ p,
+[class*="rounded-[119.272px]"]:hover ~ p{color:#0804ff !important}
+[class*="rounded-[159.368px]"]:hover p,
+[class*="rounded-[119.272px]"]:hover p{color:#0804ff !important;transition:color .3s ease}
+
+/* --- Карточки вакансий: кнопка «хочу работать» (rounded-[7.032px]) --- */
+[class*="rounded-[7.032px]"]{cursor:pointer;transition:transform .25s ease, filter .25s ease}
+[class*="rounded-[7.032px]"]:hover{transform:translateY(-2px);filter:brightness(1.12)}
+
+/* --- Колокол: серый → синий при наведении, покачивание --- */
+.rso-bell{transform-origin:top center}
+.rso-bell__img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;pointer-events:none;
+  transition:opacity .35s ease;
+  filter:drop-shadow(0 24px 40px rgba(8,4,255,.28));
+}
+.rso-bell__blue{opacity:0}
+.rso-bell:hover .rso-bell__blue{opacity:1}
+.rso-bell:hover .rso-bell__grey{opacity:0}
+
+/* --- FAQ: плавная смена текста ответа --- */
+.faq-answer{animation:faqfade .35s cubic-bezier(.22,.61,.36,1)}
+@keyframes faqfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* --- Плавающие 3D-иконки в преимуществах --- */
+.anim-float{animation:anim-float 5.5s cubic-bezier(.45,.05,.55,.95) infinite}
+@keyframes anim-float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(3deg)}}
+
+/* --- Качание колокола --- */
+.anim-swing{animation:anim-swing 4.5s ease-in-out infinite;transform-origin:top center}
+@keyframes anim-swing{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+
+/* --- Уважение к «уменьшить движение» --- */
+@media (prefers-reduced-motion:reduce){
+  [data-name="Desktop - 2"] > .anim-reveal{opacity:1 !important;transform:none !important;transition:none}
+  .anim-float,.anim-swing{animation:none}
+}
+
+/* ================= Форма заявки ================= */
+.lead{background:#0804ff;padding:90px 24px 110px;display:flex;justify-content:center}
+.lead__card{
+  width:100%;max-width:760px;background:#fff;border-radius:40px;
+  padding:56px clamp(24px,5vw,64px);box-shadow:0 30px 80px rgba(3,0,120,.35);
+}
+.lead__head{margin-bottom:34px}
+.lead__title{
+  font-family:'Stolzl:Bold','Stolzl',sans-serif;font-weight:700;
+  font-size:clamp(32px,5vw,52px);letter-spacing:-.03em;line-height:1.02;color:#0a0a14;margin:0 0 14px;
+}
+.lead__sub{
+  font-family:'Stolzl:Medium','Stolzl',sans-serif;font-size:clamp(16px,2.2vw,20px);
+  color:#6a6a72;line-height:1.4;margin:0;
+}
+.lead__form{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.lead__input{
+  font-family:'Stolzl:Regular','Stolzl',sans-serif;font-size:19px;color:#0a0a14;
+  padding:20px 26px;border:2px solid #ececec;border-radius:100px;outline:none;
+  transition:border-color .2s ease, box-shadow .2s ease;background:#fafafa;
+}
+.lead__input::placeholder{color:#b3b3ba}
+.lead__input:focus{border-color:#0804ff;box-shadow:0 0 0 4px rgba(8,4,255,.12);background:#fff}
+.lead__btn{
+  font-family:'Stolzl:Medium','Stolzl',sans-serif;font-size:20px;font-weight:500;color:#fff;
+  background:#0804ff;border:0;border-radius:100px;padding:22px;cursor:pointer;margin-top:6px;
+  transition:transform .25s ease, box-shadow .25s ease, background-color .25s ease;
+}
+.lead__btn:hover{transform:translateY(-2px);background:#0300c9;box-shadow:0 14px 32px rgba(8,4,255,.4)}
+.lead__btn:active{transform:scale(.98)}
+.lead__error{color:#e11d48;font-family:'Stolzl:Medium','Stolzl',sans-serif;font-size:15px;margin:12px 4px 0}
+.lead__note{color:#a7a7ae;font-family:'Stolzl:Regular','Stolzl',sans-serif;font-size:13px;margin:18px 4px 0;line-height:1.4}
+.lead__done{text-align:center;padding:20px 0}
+.lead__check{
+  width:88px;height:88px;margin:0 auto 24px;border-radius:50%;
+  background:#eef0ff;color:#0804ff;display:grid;place-items:center;
+  animation:pop .45s cubic-bezier(.34,1.56,.64,1);
+}
+.lead__check svg{width:44px;height:44px}
+@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}

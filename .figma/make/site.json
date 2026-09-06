@@ -1,0 +1,12 @@
+{
+  "title": "РСО Инжиниринг — короткая дорога к первой работе",
+  "description": "Выбирай работу по душе, откликайся — всё остальное мы сделаем за тебя. Работа без опыта по всей России.",
+  "language": "ru",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
