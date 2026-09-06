@@ -27,17 +27,14 @@ git push -u origin main
 
 Дальше каждый `git push` в `main` = автоматический передеплой.
 
-## 3. Приём заявок на почту (Web3Forms)
+## 3. Приём заявок на почту (Web3Forms) — уже настроено ✅
 
-Чтобы номера с формы приходили на почту:
+Ключ Web3Forms уже вставлен в `src/imports/Desktop2/index.tsx`
+(`WEB3FORMS_ACCESS_KEY`). Заявки с формы приходят на почту, привязанную
+к этому ключу. Проверено — отправка работает.
 
-1. https://web3forms.com → введи рабочую почту → получишь **Access Key**.
-2. В файле `src/imports/Desktop2/index.tsx` замени:
-   ```js
-   const WEB3FORMS_ACCESS_KEY = "YOUR_ACCESS_KEY";
-   ```
-   на свой ключ.
-3. `git commit -am "web3forms key" && git push` — Vercel передеплоит.
+Если нужно сменить почту-получателя — получи новый ключ на https://web3forms.com
+и замени значение `WEB3FORMS_ACCESS_KEY`.
 
 ## Локальный запуск
 

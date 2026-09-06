@@ -769,7 +769,7 @@ function formatRuPhone(raw: string): string {
 
 // Ключ Web3Forms — получи на https://web3forms.com (введи рабочую почту РСО),
 // вставь сюда, и заявки начнут приходить на эту почту.
-const WEB3FORMS_ACCESS_KEY = "YOUR_ACCESS_KEY";
+const WEB3FORMS_ACCESS_KEY = "a0045c2e-3330-4c83-8469-297c5e5e50dc";
 
 function ContactsPhone() {
   const [value, setValue] = useState("");
