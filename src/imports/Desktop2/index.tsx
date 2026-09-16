@@ -840,12 +840,10 @@ function formatRuPhone(raw: string): string {
   return out;
 }
 
-// Ключ Web3Forms — получи на https://web3forms.com (введи рабочую почту РСО),
-// вставь сюда, и заявки начнут приходить на эту почту.
-const WEB3FORMS_ACCESS_KEY: string = "a0045c2e-3330-4c83-8469-297c5e5e50dc";
-
-// Адреса, куда дублируются заявки (через cc). Можно добавить ещё через запятую.
-const LEAD_RECIPIENTS = "recruiting@rsoing.ru";
+// Заявки уходят на собственный серверлес-эндпоинт (api/lead.js),
+// который отправляет письмо через SMTP российской почты (Яндекс 360 / VK WorkMail).
+// Получатели и SMTP-доступ настраиваются в переменных окружения Vercel.
+const LEAD_ENDPOINT = "/api/lead";
 
 function ContactsPhone() {
   const [value, setValue] = useState("");
@@ -858,19 +856,14 @@ function ContactsPhone() {
     if (!valid || sending) return;
     setSending(true);
     try {
-      if (WEB3FORMS_ACCESS_KEY && WEB3FORMS_ACCESS_KEY !== "YOUR_ACCESS_KEY") {
-        await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({
-            access_key: WEB3FORMS_ACCESS_KEY,
-            subject: "Новая заявка с сайта РСО Инжиниринг",
-            from_name: "Сайт РСО Инжиниринг",
-            cc: LEAD_RECIPIENTS,
-            phone: value,
-          }),
-        });
-      }
+      await fetch(LEAD_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          subject: "Новая заявка с сайта РСО Инжиниринг",
+          "Телефон": value,
+        }),
+      });
       setSent(true);
     } catch {
       setSent(true);
@@ -941,22 +934,17 @@ function LeadModal() {
     if (!valid || sending) return;
     setSending(true);
     try {
-      if (WEB3FORMS_ACCESS_KEY && WEB3FORMS_ACCESS_KEY !== "YOUR_ACCESS_KEY") {
-        await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({
-            access_key: WEB3FORMS_ACCESS_KEY,
-            subject: "Новая заявка с сайта РСО Инжиниринг",
-            from_name: "Сайт РСО Инжиниринг",
-            cc: LEAD_RECIPIENTS,
-            "ФИО": form.name,
-            "Возраст": form.age,
-            "Город": form.city,
-            "Телефон": form.phone,
-          }),
-        });
-      }
+      await fetch(LEAD_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          subject: "Новая заявка с сайта РСО Инжиниринг",
+          "ФИО": form.name,
+          "Возраст": form.age,
+          "Город": form.city,
+          "Телефон": form.phone,
+        }),
+      });
       setSent(true);
     } catch {
       setSent(true);
