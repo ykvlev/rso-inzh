@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import svgPaths from "./svg-dawji63twl";
 import imgImage19705 from "./e8df840acb0ed8e7baff4bc09a12e6028ac0338b.png";
 import imgImage19699 from "./5f03d5d8df150c77c6e08812f207989ab7cdb766.png";
@@ -435,7 +436,7 @@ function Frame19() {
         <p className="leading-[1.03]">Масштабные проекты</p>
       </div>
       <div className="-translate-y-full [word-break:break-word] absolute flex flex-col font-['Stolzl:Regular',sans-serif] h-[77.855px] justify-end leading-[0] left-[37.55px] not-italic text-[21px] text-black top-[246.55px] tracking-[-0.21px] w-[289.908px]">
-        <p className="leading-[1.1]">задачи как у штатных специалистов, наставничество</p>
+        <p className="leading-[1.1]">работа с ведущими компаниями нашей страны</p>
       </div>
       <div className="absolute left-[287.96px] size-[364.883px] top-[-13.74px]" data-name="image 19715">
         <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage19715} />
@@ -449,7 +450,7 @@ function Frame23() {
     <div className="absolute bg-white h-[282px] left-[77px] overflow-clip rounded-[23px] top-[1290.73px] w-[630px]">
       <p className="[word-break:break-word] absolute font-['Stolzl:Regular',sans-serif] leading-[1.03] left-[37.55px] not-italic text-[45px] text-black top-[34px] tracking-[-0.45px] w-[285.158px]">Достойные условия</p>
       <div className="-translate-y-full [word-break:break-word] absolute flex flex-col font-['Stolzl:Regular',sans-serif] justify-end leading-[0] left-[37.55px] not-italic text-[21px] text-black top-[246.55px] tracking-[-0.21px] w-[272.51px]">
-        <p className="leading-[1.1]">проживание, питание на работе, спецодежда</p>
+        <p className="leading-[1.1]">проживание, питание, медкомиссия</p>
       </div>
       <div className="absolute left-[273.93px] size-[400.866px] top-[-34.33px]" data-name="image 19719">
         <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage19719} />
@@ -496,8 +497,89 @@ function Frame20() {
   );
 }
 
+const REVIEWS: string[] = [
+  "Благодарю сотрудников за новый опыт и навыки. Команда супер, проекты интересные, зп соответствует договорённости. Жалею что раньше не знал об этой организации.",
+  "Хорошее местоположение данной организации. Помогли в студенческом трудоустройстве и сопровождали весь период, отвечая на все возникающие вопросы. Рекомендую!",
+  "Уже посоветовал знакомым. Отличный вариант для первого трудового опыта студентам: не страшно, не сложно и очень полезно. А также крутой вариант подработки летом на ключевых нефтегазовых объектах страны. Спасибо команде РСО Инжиниринга за слаженную работу и человеческое отношение!",
+  "Хочу от всего сердца поблагодарить эту организацию! Два года подряд летом трудоустраивалась именно у них, и всё это время я чувствовала колоссальную поддержку. На каждом этапе всё было чётко и прозрачно, никаких вопросов просто не возникало. Продуманный и по-настоящему профессиональный подход к работе — это действительно чувствуется. И, конечно, команда — очень приятный, дружелюбный и отзывчивый коллектив.",
+];
+
+function ReviewCard({ text }: { text: string }) {
+  return (
+    <div className="flex h-full w-[340px] shrink-0 flex-col rounded-[18px] border border-[#ececec] bg-[#fafafa] p-[28px]">
+      <span className="font-['Stolzl:Bold',sans-serif] text-[52px] leading-[0.6] text-[#0804ff]">“</span>
+      <p className="mt-[12px] overflow-y-auto font-['Stolzl:Regular',sans-serif] text-[16px] leading-[1.5] text-[#333] pr-[4px]">
+        {text}
+      </p>
+    </div>
+  );
+}
+
 function Slide() {
-  return <div className="absolute bg-white h-[721.125px] left-[79px] rounded-[28px] top-[70px] w-[1282px]" data-name="Slide 16:9 - 1" />;
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const toggle = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.play();
+      setPlaying(true);
+    } else {
+      v.pause();
+      setPlaying(false);
+    }
+  };
+
+  return (
+    <div
+      className="absolute flex gap-[24px] h-[721.125px] left-[79px] top-[70px] w-[1282px]"
+      data-name="Slide 16:9 - 1"
+    >
+      {/* Ролик — вертикальный, сбоку */}
+      <div className="relative h-full w-[405px] shrink-0 overflow-clip rounded-[28px] bg-black">
+        <video
+          ref={videoRef}
+          src="/video/promo.mp4"
+          className="absolute inset-0 size-full object-cover"
+          playsInline
+          preload="metadata"
+          onClick={toggle}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onEnded={() => setPlaying(false)}
+        />
+        <button
+          type="button"
+          aria-label={playing ? "Пауза" : "Смотреть видео"}
+          onClick={toggle}
+          style={{
+            opacity: playing ? 0 : 1,
+            pointerEvents: playing ? "none" : "auto",
+            background: playing ? "transparent" : "rgba(0,0,0,0.25)",
+            transition: "opacity .3s ease",
+          }}
+          className="absolute inset-0 flex items-center justify-center"
+        >
+          <span className="flex items-center justify-center rounded-full bg-white/95 size-[92px] shadow-[0_8px_40px_rgba(0,0,0,0.35)] transition-transform duration-200 hover:scale-105">
+            <svg width="30" height="36" viewBox="0 0 34 40" fill="none">
+              <path d="M32 17.4A3 3 0 0 1 32 22.6L5 39A3 3 0 0 1 0.5 36.4V3.6A3 3 0 0 1 5 1L32 17.4Z" fill="#0804ff" />
+            </svg>
+          </span>
+        </button>
+      </div>
+
+      {/* Отзывы — рядом с роликом */}
+      <div className="relative flex h-full flex-1 flex-col overflow-clip rounded-[28px] bg-white px-[34px] py-[30px]">
+        <p className="mb-[20px] font-['Stolzl:Medium',sans-serif] text-[30px] text-black tracking-[-0.9px]">Отзывы</p>
+        <div className="flex flex-1 gap-[20px] overflow-x-auto overflow-y-hidden pb-[8px]">
+          {REVIEWS.map((text, i) => (
+            <ReviewCard key={i} text={text} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function Frame18() {
@@ -743,15 +825,6 @@ function Group6() {
   );
 }
 
-function Group8() {
-  return (
-    <div className="absolute contents left-[563.93px] top-[3846.89px]">
-      <div className="absolute bg-[#0804ff] h-[54.224px] left-[563.93px] rounded-[9px] top-[3846.89px] w-[312.133px]" />
-      <p className="[word-break:break-word] absolute font-['Stolzl:Bold',sans-serif] leading-[1.1] left-[580.6px] not-italic text-[29.137px] text-white top-[3858.12px] tracking-[-1.1655px] whitespace-nowrap">РСО ИНЖИНИРИНГ</p>
-    </div>
-  );
-}
-
 function formatRuPhone(raw: string): string {
   let d = raw.replace(/\D/g, "");
   if (d.startsWith("8")) d = "7" + d.slice(1);
@@ -769,7 +842,10 @@ function formatRuPhone(raw: string): string {
 
 // Ключ Web3Forms — получи на https://web3forms.com (введи рабочую почту РСО),
 // вставь сюда, и заявки начнут приходить на эту почту.
-const WEB3FORMS_ACCESS_KEY = "a0045c2e-3330-4c83-8469-297c5e5e50dc";
+const WEB3FORMS_ACCESS_KEY: string = "a0045c2e-3330-4c83-8469-297c5e5e50dc";
+
+// Адреса, куда дублируются заявки (через cc). Можно добавить ещё через запятую.
+const LEAD_RECIPIENTS = "recruiting@rsoing.ru";
 
 function ContactsPhone() {
   const [value, setValue] = useState("");
@@ -790,6 +866,7 @@ function ContactsPhone() {
             access_key: WEB3FORMS_ACCESS_KEY,
             subject: "Новая заявка с сайта РСО Инжиниринг",
             from_name: "Сайт РСО Инжиниринг",
+            cc: LEAD_RECIPIENTS,
             phone: value,
           }),
         });
@@ -826,6 +903,133 @@ function ContactsPhone() {
         className="w-full bg-transparent border-0 outline-none font-['Stolzl:Regular',sans-serif] text-[43.196px] text-white tracking-[-1.2959px] placeholder:text-[#3c3c3c] caret-white"
       />
     </form>
+  );
+}
+
+function LeadModal() {
+  const [open, setOpen] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [form, setForm] = useState({ name: "", age: "", city: "", phone: "" });
+
+  useEffect(() => {
+    const onOpen = () => {
+      setSent(false);
+      setForm({ name: "", age: "", city: "", phone: "" });
+      setOpen(true);
+    };
+    window.addEventListener("rso:open-lead", onOpen);
+    return () => window.removeEventListener("rso:open-lead", onOpen);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  const phoneValid = form.phone.replace(/\D/g, "").length === 11;
+  const valid = form.name.trim().length > 1 && !!form.age.trim() && form.city.trim().length > 1 && phoneValid;
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!valid || sending) return;
+    setSending(true);
+    try {
+      if (WEB3FORMS_ACCESS_KEY && WEB3FORMS_ACCESS_KEY !== "YOUR_ACCESS_KEY") {
+        await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            access_key: WEB3FORMS_ACCESS_KEY,
+            subject: "Новая заявка с сайта РСО Инжиниринг",
+            from_name: "Сайт РСО Инжиниринг",
+            cc: LEAD_RECIPIENTS,
+            "ФИО": form.name,
+            "Возраст": form.age,
+            "Город": form.city,
+            "Телефон": form.phone,
+          }),
+        });
+      }
+      setSent(true);
+    } catch {
+      setSent(true);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  if (!open) return null;
+
+  return createPortal(
+    <div className="lead-modal__overlay" onClick={() => setOpen(false)}>
+      <div className="lead-modal__card" onClick={(e) => e.stopPropagation()}>
+        <button className="lead-modal__close" onClick={() => setOpen(false)} aria-label="Закрыть" type="button">
+          ×
+        </button>
+
+        {sent ? (
+          <div className="lead__done">
+            <div className="lead__check">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <p className="lead-modal__done-text">Спасибо! Совсем скоро с тобой свяжется наш специалист 💙</p>
+          </div>
+        ) : (
+          <>
+            <div className="lead__head">
+              <h3 className="lead__title">Оставить заявку</h3>
+              <p className="lead__sub">Заполни анкету — специалист свяжется с тобой</p>
+            </div>
+            <form className="lead__form" onSubmit={submit}>
+              <input
+                className="lead__input"
+                placeholder="ФИО"
+                value={form.name}
+                onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                disabled={sending}
+              />
+              <input
+                className="lead__input"
+                placeholder="Возраст"
+                inputMode="numeric"
+                value={form.age}
+                onChange={(e) => setForm((f) => ({ ...f, age: e.target.value.replace(/\D/g, "").slice(0, 2) }))}
+                disabled={sending}
+              />
+              <input
+                className="lead__input"
+                placeholder="Город"
+                value={form.city}
+                onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
+                disabled={sending}
+              />
+              <input
+                className="lead__input"
+                type="tel"
+                inputMode="tel"
+                placeholder="Номер телефона"
+                value={form.phone}
+                onChange={(e) => setForm((f) => ({ ...f, phone: formatRuPhone(e.target.value) }))}
+                disabled={sending}
+              />
+              <button className="lead__btn" type="submit" disabled={!valid || sending}>
+                {sending ? "Отправляем…" : "Отправить заявку"}
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>,
+    document.body
   );
 }
 
@@ -889,7 +1093,7 @@ export default function Desktop() {
       <Group6 />
       <ContactsPhone />
       <div className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Stolzl:Regular',sans-serif] justify-center leading-[0] left-[calc(50%-295.5px)] not-italic text-[23px] text-white top-[6953.86px] whitespace-nowrap">
-        <p className="leading-[1.1]">© 2026 РСО Инжиниринг. Все права защищены.</p>
+        <p className="leading-[1.1]">© 2026 ООО «РСО Инжиниринг». Все права защищены.</p>
       </div>
       <div className="absolute h-[80.691px] left-[122.8px] rounded-[119.272px] top-[2818.65px] w-[383.193px]">
         <div className="overflow-clip relative rounded-[inherit] size-full">
@@ -909,7 +1113,7 @@ export default function Desktop() {
         <img alt="" className="rso-bell__img rso-bell__grey" src="/img/bell-grey.png" />
         <img alt="" className="rso-bell__img rso-bell__blue" src="/img/bell-blue.png" />
       </button>
-      <Group8 />
+      <LeadModal />
     </div>
   );
 }

@@ -23,3 +23,6 @@ logs/
 /_backup_static/
 .vercel
 dist/
+
+.vercel
+.env*

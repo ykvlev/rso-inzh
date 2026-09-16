@@ -5,6 +5,8 @@ import "./anim.css";
 const BASE_W = 1440;
 const BASE_H = 7051;
 
+const openLead = () => window.dispatchEvent(new CustomEvent("rso:open-lead"));
+
 export default function App() {
   const [scale, setScale] = useState(1);
   const outerRef = useRef<HTMLDivElement>(null);
@@ -122,11 +124,11 @@ export default function App() {
         // не превращаем крупный заголовок раздела «Хочу работать» в кнопку
         if (btn && !p.closest('[class*="text-[70px]"]')) {
           btn.style.cursor = "pointer";
-          btn.addEventListener("click", () => scrollToEl(anchors.contacts()));
+          btn.addEventListener("click", () => openLead());
         }
       }
     });
-    root.querySelector(".rso-bell")?.addEventListener("click", () => scrollToEl(anchors.contacts()));
+    root.querySelector(".rso-bell")?.addEventListener("click", () => openLead());
 
     return () => io.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps

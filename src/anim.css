@@ -95,6 +95,28 @@
 .lead__btn:active{transform:scale(.98)}
 .lead__error{color:#e11d48;font-family:'Stolzl:Medium','Stolzl',sans-serif;font-size:15px;margin:12px 4px 0}
 .lead__note{color:#a7a7ae;font-family:'Stolzl:Regular','Stolzl',sans-serif;font-size:13px;margin:18px 4px 0;line-height:1.4}
+/* --- Модальное окно заявки --- */
+.lead-modal__overlay{
+  position:fixed;inset:0;z-index:9999;
+  background:rgba(6,4,40,.55);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  animation:leadfade .2s ease;
+}
+@keyframes leadfade{from{opacity:0}to{opacity:1}}
+.lead-modal__card{
+  position:relative;width:100%;max-width:460px;background:#fff;border-radius:32px;
+  padding:44px clamp(24px,5vw,44px);box-shadow:0 40px 100px rgba(3,0,120,.4);
+  animation:leadpop .3s cubic-bezier(.34,1.3,.64,1);
+}
+@keyframes leadpop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+.lead-modal__close{
+  position:absolute;top:14px;right:18px;width:40px;height:40px;border:0;background:transparent;
+  font-size:32px;line-height:1;color:#b3b3ba;cursor:pointer;border-radius:50%;transition:color .2s,background .2s;
+}
+.lead-modal__close:hover{color:#0a0a14;background:#f2f2f5}
+.lead-modal__done-text{
+  font-family:'Stolzl:Medium','Stolzl',sans-serif;font-size:22px;line-height:1.35;color:#0a0a14;margin:0;
+}
 .lead__done{text-align:center;padding:20px 0}
 .lead__check{
   width:88px;height:88px;margin:0 auto 24px;border-radius:50%;
