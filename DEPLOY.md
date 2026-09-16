@@ -1,44 +1,45 @@
-# Деплой — РСО Инжиниринг
+# РСО Инжиниринг — сайт
 
-Проект: **Vite + React + Tailwind**. Уже закоммичен в git (ветка `main`).
+Проект: **Vite + React + Tailwind**. Приём заявок — свой Node-сервер
+(`server.js`), письма уходят через SMTP Яндекс 360.
 
-## 1. Запушить на GitHub
-
-`gh` не установлен, поэтому создай репозиторий вручную:
-
-1. Зайди на https://github.com/new → создай **пустой** репозиторий (без README/.gitignore), например `rso-inzh`.
-2. В папке проекта выполни (подставь свой логин):
-
-```bash
-git remote add origin https://github.com/ТВОЙ_ЛОГИН/rso-inzh.git
-git push -u origin main
-```
-
-Если попросит логин — введи GitHub-логин и **токен** (Settings → Developer settings → Personal access tokens) вместо пароля.
-
-## 2. Задеплоить на Vercel
-
-1. https://vercel.com → **Add New → Project** → Import твой GitHub-репозиторий.
-2. Vercel сам определит Vite (настройки уже заданы в `vercel.json`):
-   - Framework: **Vite**
-   - Build: `npm run build`
-   - Output: `dist`
-3. Нажми **Deploy**. Через ~1 мин будет ссылка вида `rso-inzh.vercel.app`.
-
-Дальше каждый `git push` в `main` = автоматический передеплой.
-
-## 3. Приём заявок на почту (Web3Forms) — уже настроено ✅
-
-Ключ Web3Forms уже вставлен в `src/imports/Desktop2/index.tsx`
-(`WEB3FORMS_ACCESS_KEY`). Заявки с формы приходят на почту, привязанную
-к этому ключу. Проверено — отправка работает.
-
-Если нужно сменить почту-получателя — получи новый ключ на https://web3forms.com
-и замени значение `WEB3FORMS_ACCESS_KEY`.
-
-## Локальный запуск
+## Локальная разработка
 
 ```bash
 npm install
 npm run dev
 ```
+
+## Локальная проверка «как на сервере»
+
+```bash
+npm run build     # собрать сайт в dist/
+npm start         # поднять server.js (сайт + приём заявок) на :3000
+```
+Приём заявок при этом требует переменных SMTP (см. ниже) — иначе `/api/lead`
+вернёт ошибку «SMTP is not configured», а сам сайт работает.
+
+## Продакшн (VPS + домен + HTTPS)
+
+Полная пошаговая инструкция — в **[DEPLOY-VPS.md](DEPLOY-VPS.md)**:
+Ubuntu → Node → сборка → pm2 → nginx → Let's Encrypt → Яндекс 360.
+
+## Приём заявок
+
+Обе формы (телефон в футере + модалка «оставить заявку») шлют POST на `/api/lead`.
+Сервер отправляет письмо через SMTP на адреса из `LEAD_TO`.
+
+Переменные окружения (файл `.env` на сервере, он в `.gitignore`):
+
+```
+PORT=3000
+SMTP_HOST=smtp.yandex.ru
+SMTP_PORT=465
+SMTP_USER=recruiting@rsoing.ru
+SMTP_PASS=<пароль приложения Яндекса>
+LEAD_TO=recruiting@rsoing.ru
+```
+
+- `SMTP_PASS` — **пароль приложения** Яндекса (Яндекс ID → Безопасность →
+  Пароли приложений → «Почта»), не обычный пароль от ящика.
+- Несколько получателей: `LEAD_TO=recruiting@rsoing.ru,hr@rsoing.ru`
