@@ -615,7 +615,7 @@ function Slide() {
       </div>
 
       {/* Отзывы — рядом с роликом */}
-      <div className="relative flex h-full flex-1 flex-col overflow-clip rounded-[28px] bg-white px-[34px] py-[30px]">
+      <div className="relative flex h-full min-w-0 flex-1 flex-col overflow-clip rounded-[28px] bg-white px-[34px] py-[30px]">
         <p className="mb-[20px] font-['Stolzl:Medium',sans-serif] text-[30px] text-black tracking-[-0.9px]">Отзывы</p>
         <div
           ref={reviewsRef}
