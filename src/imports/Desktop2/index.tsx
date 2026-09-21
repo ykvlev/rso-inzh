@@ -518,6 +518,51 @@ function ReviewCard({ text }: { text: string }) {
 function Slide() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const reviewsRef = useRef<HTMLDivElement>(null);
+
+  // Горизонтальная прокрутка отзывов: колесо мыши + перетаскивание.
+  useEffect(() => {
+    const el = reviewsRef.current;
+    if (!el) return;
+
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY === 0) return;
+      el.scrollLeft += e.deltaY;
+      e.preventDefault();
+    };
+
+    let down = false;
+    let startX = 0;
+    let startLeft = 0;
+    const onDown = (e: PointerEvent) => {
+      down = true;
+      startX = e.clientX;
+      startLeft = el.scrollLeft;
+      el.setPointerCapture(e.pointerId);
+      el.style.cursor = "grabbing";
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!down) return;
+      el.scrollLeft = startLeft - (e.clientX - startX);
+    };
+    const onUp = () => {
+      down = false;
+      el.style.cursor = "grab";
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    el.addEventListener("pointerdown", onDown);
+    el.addEventListener("pointermove", onMove);
+    el.addEventListener("pointerup", onUp);
+    el.addEventListener("pointercancel", onUp);
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+      el.removeEventListener("pointerdown", onDown);
+      el.removeEventListener("pointermove", onMove);
+      el.removeEventListener("pointerup", onUp);
+      el.removeEventListener("pointercancel", onUp);
+    };
+  }, []);
 
   const toggle = () => {
     const v = videoRef.current;
@@ -540,7 +585,7 @@ function Slide() {
       <div className="relative h-full w-[405px] shrink-0 overflow-clip rounded-[28px] bg-black">
         <video
           ref={videoRef}
-          src="/video/promo.mp4"
+          src="/video/promo.mp4#t=0.1"
           className="absolute inset-0 size-full object-cover"
           playsInline
           preload="metadata"
@@ -572,7 +617,10 @@ function Slide() {
       {/* Отзывы — рядом с роликом */}
       <div className="relative flex h-full flex-1 flex-col overflow-clip rounded-[28px] bg-white px-[34px] py-[30px]">
         <p className="mb-[20px] font-['Stolzl:Medium',sans-serif] text-[30px] text-black tracking-[-0.9px]">Отзывы</p>
-        <div className="flex flex-1 gap-[20px] overflow-x-auto overflow-y-hidden pb-[8px]">
+        <div
+          ref={reviewsRef}
+          className="flex flex-1 gap-[20px] overflow-x-auto overflow-y-hidden pb-[8px] cursor-grab select-none [scrollbar-width:thin]"
+        >
           {REVIEWS.map((text, i) => (
             <ReviewCard key={i} text={text} />
           ))}
@@ -837,7 +885,9 @@ function formatRuPhone(raw: string): string {
   if (p.length >= 3) out += ") " + p.slice(3, 6);
   if (p.length >= 6) out += "-" + p.slice(6, 8);
   if (p.length >= 8) out += "-" + p.slice(8, 10);
-  return out;
+  // Убираем хвостовые разделители, иначе Backspace «залипает»:
+  // стёртый разделитель тут же дорисовывается и цифры не стираются.
+  return out.replace(/[\s\-()]+$/, "");
 }
 
 // Заявки уходят на собственный серверлес-эндпоинт (api/lead.js),
